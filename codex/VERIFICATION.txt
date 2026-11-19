@@ -1,0 +1,30 @@
+Deep PTC Codex Adapter 1.0.0 - Verification
+Date: 2026-11-19 (Asia/Shanghai)
+Environment: Windows; Node v24.16.0; codex-cli 0.144.1
+
+Observed / executed (this repository snapshot):
+- Model gate: live model slug containing deepseek (or the common spelling deepseep, case-insensitive) activates;
+  non-matching slugs and a missing model stay inactive.
+- node --test codex/tests/adapter.test.mjs codex/tests/native-hooks.test.mjs
+  exit 0; tests 37; pass 37; fail 0; skipped 0.
+- Gate vectors cover deepseek-chat, DeepSeek-R1, deepseek-v4.1-flash, vendor/deepseek-v4,
+  <router>/deepseek-v4.1-flash, deepseep-v4, DeepSeep-R1, my-deepseek-router-v2, DEEPSEEK;
+  and reject undefined, null, empty string, gpt-6.1-sol, claude-sonnet, ds-router, gpt-deep.
+- All lifecycle hooks (SessionStart, UserPromptSubmit, PostCompact) emit structured output only for matching models and
+  create no profile files; invalid hook JSON fails without fake activation.
+- PreToolUse sleep guard denies foreground sleeps over 5s only on matching models.
+- Project cards propose/accept/history/restore keep exact bytes; checkpoints persist recovery data.
+- Native CLI install -> upgrade -> restore round-trips config bytes exactly; failed install rolls back;
+  uninstall keeps later configuration edits and project data.
+- Request-level test against a local mock Responses service: matching-model turn receives hook context, GPT turn does not.
+
+NOT RUN:
+- Live DeepSeek provider API compatibility (plugin does not alter model/provider configuration).
+- Codex Desktop UI end-to-end; verification ran against the CLI runtime.
+- Native execution on macOS/Linux (launchers supplied, not platform-tested).
+- Original DSH sidebar/card UI in Codex: deliberately not claimed as ported.
+
+Integrity:
+- Release files are listed with SHA-256 in codex/RELEASE-HASHES.json.
+- Verify from the repository root:
+  node -e "const r=require('./codex/RELEASE-HASHES.json'),c=require('node:crypto'),fs=require('node:fs');for(const[n,h]of Object.entries(r)){const b=fs.readFileSync(n);if(c.createHash('sha256').update(b).digest('hex')!==h)console.log('MISMATCH',n)}"

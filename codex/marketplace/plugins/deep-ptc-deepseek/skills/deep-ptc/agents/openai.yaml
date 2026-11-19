@@ -1,0 +1,6 @@
+interface:
+  display_name: "Deep PTC · DeepSeek"
+  short_description: "DeepSeek-gated workflow, project cards and recovery records"
+  default_prompt: "Use $deep-ptc to manage project cards and resume this DeepSeek task with verified progress."
+policy:
+  allow_implicit_invocation: false

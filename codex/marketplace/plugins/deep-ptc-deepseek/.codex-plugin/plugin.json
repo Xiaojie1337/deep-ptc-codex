@@ -1,0 +1,10 @@
+{
+  "name": "deep-ptc-deepseek",
+  "version": "1.0.0",
+  "description": "Deep PTC workflow for Codex, automatically gated whenever the live model slug contains deepseek (case-insensitive; also tolerates the deepseep spelling).",
+  "author": {
+    "name": "Deep PTC Codex Adapter"
+  },
+  "skills": "./skills/",
+  "hooks": "./hooks/hooks.json"
+}
